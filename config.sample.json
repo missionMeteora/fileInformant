@@ -1,0 +1,27 @@
+{
+	"apiInfo" : {
+		"mandrill" : {
+			"key" : "[MANDRILL API KEY]",
+			"subAccount" : "[MANDRILL API KEY]",
+			"fromEmail" : "noreply@mycompany.com",
+			"fromName" : "No reply"
+		},
+		"twilio" : {
+			"key" : "[TWILIO API KEY]",
+			"token" : "[TWILIO API TOKEN]"
+		}
+	},
+	"subscribers" : [
+		{
+			"name" : "Josh",
+			"phone" : "+15555555",
+			"email" : "josh@mycompany.com"
+		}
+	],
+	"files" : [
+		{
+			"location" : "./merp.txt",
+			"interval" :  "15s"
+		}
+	]
+}
