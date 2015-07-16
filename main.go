@@ -19,7 +19,10 @@ func main() {
 	ec := getEmailClient(cfg.ApiInfo.Mandrill)
 	tc := getTwilioClient(cfg.ApiInfo.Twilio)
 
-	file.New("./merp.txt", "15s", cfg.Subscribers, ec, tc)
+	for _, f := range cfg.Files {
+		file.New(f.Location, f.Interval, cfg.Subscribers, ec, tc)
+	}
+
 	select {}
 }
 
