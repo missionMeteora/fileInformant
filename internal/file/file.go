@@ -11,7 +11,7 @@ import (
 	"github.com/missionMeteora/fileInformant/internal/config"
 )
 
-func New(loc, interval string, subs []config.Subscriber, ec *mandrill.Client, tc *twilio.Client) (*File, error) {
+func New(name, loc, interval string, subs []config.Subscriber, ec *mandrill.Client, tc *twilio.Client) (*File, error) {
 	d, err := time.ParseDuration(interval)
 	if err != nil {
 		return nil, err
@@ -21,6 +21,7 @@ func New(loc, interval string, subs []config.Subscriber, ec *mandrill.Client, tc
 		ec: ec,
 		tc: tc,
 
+		name:     name,
 		loc:      loc,
 		interval: d,
 		subs:     subs,
@@ -38,6 +39,8 @@ type File struct {
 	ec *mandrill.Client
 	tc *twilio.Client
 
+	// Name of server
+	name     string
 	loc      string
 	interval time.Duration
 	subs     []config.Subscriber
@@ -101,11 +104,11 @@ func (f *File) setInterval() {
 func (f *File) notify() {
 	for _, s := range f.subs {
 		if len(s.Email) > 0 {
-			f.ec.SendMessage(getMessage(f.loc), emailSubject, s.Email, s.Name, emailTags)
+			f.ec.SendMessage(getEmailMessage(f.loc, f.name), emailSubject, s.Email, s.Name, emailTags)
 		}
 
 		if len(s.Phone) > 0 {
-			f.tc.Send(s.Phone, "+14695138730", "Hai")
+			f.tc.Send(s.Phone, getSmsMessage(f.loc, f.name))
 		}
 	}
 }

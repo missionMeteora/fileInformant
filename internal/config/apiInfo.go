@@ -13,6 +13,7 @@ type Mandrill struct {
 }
 
 type Twilio struct {
-	Key   string `json:"key"`
-	Token string `json:"token"`
+	Key       string `json:"key"`
+	Token     string `json:"token"`
+	FromPhone string `json:"fromPhone"`
 }

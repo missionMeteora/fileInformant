@@ -20,7 +20,7 @@ func main() {
 	tc := getTwilioClient(cfg.ApiInfo.Twilio)
 
 	for _, f := range cfg.Files {
-		file.New(f.Location, f.Interval, cfg.Subscribers, ec, tc)
+		file.New(cfg.Name, f.Location, f.Interval, cfg.Subscribers, ec, tc)
 	}
 
 	select {}
@@ -31,5 +31,5 @@ func getEmailClient(m config.Mandrill) *mandrill.Client {
 }
 
 func getTwilioClient(t config.Twilio) *twilio.Client {
-	return twilio.New(t.Key, t.Token)
+	return twilio.New(t.Key, t.Token, t.FromPhone)
 }

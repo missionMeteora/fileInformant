@@ -21,7 +21,8 @@ func New(loc string) (*Config, error) {
 }
 
 type Config struct {
-	ApiInfo     ApiInfo
+	Name        string       `json:"name"`
+	ApiInfo     ApiInfo      `json:"apiInfo"`
 	Subscribers []Subscriber `json:"subscribers"`
 	Files       []File       `json:"files"`
 }

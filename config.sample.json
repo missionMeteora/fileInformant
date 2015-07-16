@@ -1,4 +1,5 @@
 {
+	"name" : "Server name",
 	"apiInfo" : {
 		"mandrill" : {
 			"key" : "[MANDRILL API KEY]",
@@ -8,7 +9,8 @@
 		},
 		"twilio" : {
 			"key" : "[TWILIO API KEY]",
-			"token" : "[TWILIO API TOKEN]"
+			"token" : "[TWILIO API TOKEN]",
+			"fromPhone" : "[TWILIO FROM PHONE]"
 		}
 	},
 	"subscribers" : [
