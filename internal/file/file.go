@@ -71,10 +71,10 @@ func (f *File) wasModified() bool {
 //		Set f.exists to false. Return true (indicating a change has occurred)
 // Else, return false (indicating that f.exists was already set to false)
 func (f *File) existCheck(err error) bool {
+	f.mux.Lock()
+	defer f.mux.Unlock()
 	if err == os.ErrNotExist && f.exists {
-		f.mux.Lock()
 		f.exists = false
-		f.mux.Unlock()
 		return true
 	}
 
