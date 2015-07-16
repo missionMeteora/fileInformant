@@ -27,6 +27,7 @@ func New(name, loc, interval string, subs []config.Subscriber, ec *mandrill.Clie
 		subs:     subs,
 	}
 
+	// Called to set initial values of exists, size, lastModified for file
 	f.wasModified()
 	f.setInterval()
 
@@ -50,6 +51,13 @@ type File struct {
 	lastModified time.Time
 }
 
+// Returns boolean to determine if file has been changed since the last time
+//	wasModified was called.
+//
+//	If an error occurs while os.Stat is called on a file,
+// 	error is passed to f.existsCheck and value of this fn is returned.
+//
+//	If file information is available, return value of f.statsCheck fn.
 func (f *File) wasModified() bool {
 	fi, err := os.Stat(f.loc)
 	if err != nil {
@@ -59,19 +67,24 @@ func (f *File) wasModified() bool {
 	return f.statsCheck(fi)
 }
 
+// If provided error == os.ErrNotExist and f.exists is set to true
+//		Set f.exists to false. Return true (indicating a change has occurred)
+// Else, return false (indicating that f.exists was already set to false)
 func (f *File) existCheck(err error) bool {
-	if err == os.ErrNotExist {
-		if f.exists {
-			f.mux.Lock()
-			f.exists = false
-			f.mux.Unlock()
-			return true
-		}
+	if err == os.ErrNotExist && f.exists {
+		f.mux.Lock()
+		f.exists = false
+		f.mux.Unlock()
+		return true
 	}
 
 	return false
 }
 
+// If fileInfo.Size does not equal f.size
+//		Update f.size to new value, set return boolean to true
+// If fileInfo.ModTime does not equal f.lastModified
+//		Update f.lastModified to new value, set return boolean to true
 func (f *File) statsCheck(fi os.FileInfo) (m bool) {
 	f.mux.Lock()
 
