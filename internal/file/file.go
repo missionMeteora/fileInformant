@@ -5,21 +5,18 @@ import (
 	"sync"
 	"time"
 
-	"github.com/missionMeteora/mandrill"
-	"github.com/missionMeteora/twilio"
-
 	"github.com/missionMeteora/fileInformant/internal/config"
+	"github.com/missionMeteora/fileInformant/internal/notifiers"
 )
 
-func New(name, loc, interval string, subs []config.Subscriber, ec *mandrill.Client, tc *twilio.Client) (*File, error) {
+func New(name, loc, interval string, subs []config.Subscriber, ntfrs notifiers.Notifiers) (*File, error) {
 	d, err := time.ParseDuration(interval)
 	if err != nil {
 		return nil, err
 	}
 
 	f := File{
-		ec: ec,
-		tc: tc,
+		ntfrs: ntfrs,
 
 		name:     name,
 		loc:      loc,
@@ -37,8 +34,7 @@ func New(name, loc, interval string, subs []config.Subscriber, ec *mandrill.Clie
 type File struct {
 	mux sync.RWMutex
 
-	ec *mandrill.Client
-	tc *twilio.Client
+	ntfrs notifiers.Notifiers
 
 	// Name of server
 	name     string
@@ -115,13 +111,7 @@ func (f *File) setInterval() {
 }
 
 func (f *File) notify() {
-	for _, s := range f.subs {
-		if len(s.Email) > 0 {
-			f.ec.SendMessage(getEmailMessage(f.loc, f.name), emailSubject, s.Email, s.Name, emailTags)
-		}
-
-		if len(s.Phone) > 0 {
-			f.tc.Send(s.Phone, getSmsMessage(f.loc, f.name))
-		}
+	for _, n := range f.ntfrs {
+		n.Send(f.subs, n.GetMessage(f.loc, f.name))
 	}
 }

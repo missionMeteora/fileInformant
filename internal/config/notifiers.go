@@ -1,8 +1,8 @@
 package config
 
-type ApiInfo struct {
-	Mandrill Mandrill `json:"mandrill"`
-	Twilio   Twilio   `json:"twilio"`
+type Notifiers struct {
+	Mandrill *Mandrill `json:"mandrill"`
+	Twilio   *Twilio   `json:"twilio"`
 }
 
 type Mandrill struct {

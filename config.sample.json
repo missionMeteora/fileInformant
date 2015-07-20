@@ -1,6 +1,6 @@
 {
 	"name" : "Server name",
-	"apiInfo" : {
+	"notifiers" : {
 		"mandrill" : {
 			"key" : "[MANDRILL API KEY]",
 			"subAccount" : "[MANDRILL API KEY]",
