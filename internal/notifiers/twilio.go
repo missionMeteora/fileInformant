@@ -19,7 +19,8 @@ type Twilio struct {
 	clnt *twilio.Client
 }
 
-func (t Twilio) Send(subs []config.Subscriber, msg string) {
+func (t Twilio) Send(subs []config.Subscriber, loc, name string) {
+	msg := t.getMessage(loc, name)
 	for _, s := range subs {
 		if len(s.Phone) > 0 {
 			t.clnt.Send(s.Phone, msg)
@@ -27,6 +28,6 @@ func (t Twilio) Send(subs []config.Subscriber, msg string) {
 	}
 }
 
-func (t Twilio) GetMessage(a, b string) string {
+func (t Twilio) getMessage(a, b string) string {
 	return fmt.Sprintf(twilioTmpl, a, b)
 }

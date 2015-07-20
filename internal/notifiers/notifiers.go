@@ -19,6 +19,5 @@ func New(nfrs config.Notifiers) (n Notifiers) {
 type Notifiers []Notifier
 
 type Notifier interface {
-	Send(subs []config.Subscriber, msg string)
-	GetMessage(a, b string) string
+	Send(subs []config.Subscriber, loc, name string)
 }

@@ -112,6 +112,6 @@ func (f *File) setInterval() {
 
 func (f *File) notify() {
 	for _, n := range f.ntfrs {
-		n.Send(f.subs, n.GetMessage(f.loc, f.name))
+		n.Send(f.subs, f.loc, f.name)
 	}
 }

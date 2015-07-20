@@ -28,7 +28,8 @@ type Mandrill struct {
 	clnt *mandrill.Client
 }
 
-func (m Mandrill) Send(subs []config.Subscriber, msg string) {
+func (m Mandrill) Send(subs []config.Subscriber, loc, name string) {
+	msg := m.getMessage(loc, name)
 	for _, s := range subs {
 		if len(s.Email) > 0 {
 			m.clnt.SendMessage(msg, subject, s.Email, s.Name, tags)
@@ -36,6 +37,6 @@ func (m Mandrill) Send(subs []config.Subscriber, msg string) {
 	}
 }
 
-func (m Mandrill) GetMessage(a, b string) string {
+func (m Mandrill) getMessage(a, b string) string {
 	return fmt.Sprintf(mandrillTmpl, a, b)
 }
